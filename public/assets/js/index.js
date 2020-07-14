@@ -53,7 +53,7 @@ const renderActiveNote = () => {
 const handleNoteSave = function () {
   const newNote = {
     title: $noteTitle.val(),
-    text: $noteText.val(),
+    text: $noteText.val()
   };
 
   saveNote(newNote).then(() => {
@@ -77,6 +77,7 @@ const handleNoteDelete = function (event) {
     getAndRenderNotes();
     renderActiveNote();
   });
+  
 };
 
 // Sets the activeNote and displays it
@@ -100,6 +101,7 @@ const handleRenderSaveBtn = function () {
     $saveNoteBtn.show();
   }
 };
+
 
 // Render's the list of note titles
 const renderNoteList = (notes) => {
