@@ -18,9 +18,10 @@ module.exports = app => {
                 if (err) throw err;
         
                 notes = JSON.parse(data);
+                res.json(notes);
             })
             // Read the db.json file and return all saved notes as JSON.
-            res.json(notes);
+            
         });
 
         // Setup the /api/notes post route
@@ -58,7 +59,7 @@ console.log(req.params.id)
         
              } )
 
-             res.json()
+             res.end()
         });
 
         // VIEW ROUTES
