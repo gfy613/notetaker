@@ -26,8 +26,9 @@ const saveNote = (note) => {
 
 // A function for deleting a note from the db
 const deleteNote = (id) => {
+  console.log("delete api call")
   return $.ajax({
-    url: "api/notes/" + id,
+    url: "/api/notes/" + id,
     method: "DELETE",
   });
 };
@@ -53,7 +54,7 @@ const renderActiveNote = () => {
 const handleNoteSave = function () {
   const newNote = {
     title: $noteTitle.val(),
-    text: $noteText.val()
+    text: $noteText.val(),
   };
 
   saveNote(newNote).then(() => {
@@ -74,10 +75,10 @@ const handleNoteDelete = function (event) {
   }
 
   deleteNote(note.id).then(() => {
+    console.log("delete")
     getAndRenderNotes();
     renderActiveNote();
   });
-  
 };
 
 // Sets the activeNote and displays it
@@ -101,7 +102,6 @@ const handleRenderSaveBtn = function () {
     $saveNoteBtn.show();
   }
 };
-
 
 // Render's the list of note titles
 const renderNoteList = (notes) => {

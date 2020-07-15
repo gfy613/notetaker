@@ -1,20 +1,24 @@
 const fs = require('fs');
 const path = require('path');
-
+const { uuid } = require('uuidv4');
+let notes;
 module.exports = app => {
 
     // Setup notes variable
-    fs.readFile("db/db.json","utf8", (err, data) => {
 
-        if (err) throw err;
-
-        var notes = JSON.parse(data);
 
         // API ROUTES
         // ========================================================
     
         // Setup the /api/notes get route
         app.get("/api/notes", function(req, res) {
+            // let notes;
+            fs.readFile("./db/db.json","utf-8", (err, data) => {
+
+                if (err) throw err;
+        
+                notes = JSON.parse(data);
+            })
             // Read the db.json file and return all saved notes as JSON.
             res.json(notes);
         });
@@ -23,22 +27,38 @@ module.exports = app => {
         app.post("/api/notes", function(req, res) {
             // Receives a new note, adds it to db.json, then returns the new note
             let newNote = req.body;
-            notes.push(newNote);
+            notes.push({...newNote, id: uuid()})
             updateDb();
-            return console.log("Added new note: "+newNote.title);
+            res.json(notes);
+         
         });
 
         // Retrieves a note with specific id
         app.get("/api/notes", function(req,res) {
             // display json for the notes array indices of the provided id
-            res.json(notes[req.params.id]);
+            res.json(notes);
         });
 
         // Deletes a note with specific id
         app.delete("/api/notes/:id", function(req, res) {
-            notes.splice(req.params.id, 1);
-            updateDb();
-            console.log("Deleted note with id "+req.params.id);
+console.log(req.params.id)
+            let dataId = req.params.id;
+            let newData = fs.readFileSync("./db/db.json","utf-8")
+            console.log("newdata:"+newData)
+            let newDataParse = JSON.parse(newData)
+            console.log("newdataparse"+newDataParse)
+            let newArr = newDataParse.filter(function(item){
+                return item.id != dataId
+            })
+
+            console.log("newarr"+newArr)
+
+            fs.writeFile("./db/db.json",JSON.stringify(newArr),function(err){
+            if(err) throw err;
+        
+             } )
+
+             res.json()
         });
 
         // VIEW ROUTES
@@ -62,6 +82,5 @@ module.exports = app => {
             });
         }
 
-    });
 
 }
